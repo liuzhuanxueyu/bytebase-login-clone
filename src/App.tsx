@@ -1,7 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Login } from './components/Login';
 import { auth, githubProvider } from './firebase';
-import { signInWithPopup, type User, signOut, onAuthStateChanged } from 'firebase/auth';
+import { 
+  signInWithPopup, 
+  signInWithRedirect, 
+  getRedirectResult, 
+  type User, 
+  signOut, 
+  onAuthStateChanged 
+} from 'firebase/auth';
 
 /**
  * Main App Component
@@ -13,8 +20,23 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Listen for authentication state changes
+  // Listen for authentication state changes and handle redirect result
   useEffect(() => {
+    // 1. Check if we are returning from a redirect login
+    getRedirectResult(auth)
+      .then((result) => {
+        if (result) {
+          // User is signed in.
+          // No need to do anything here, onAuthStateChanged will trigger.
+          console.log("Redirect login successful");
+        }
+      })
+      .catch((err) => {
+        console.error("Redirect login failed:", err);
+        setError(err.message || "GitHub 登录失败 (重定向)");
+      });
+
+    // 2. Listen for auth state changes
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setLoading(false);
@@ -24,15 +46,28 @@ function App() {
   }, []);
 
   /**
-   * Initiates GitHub login popup
+   * Initiates GitHub login
+   * Uses Redirect for better mobile compatibility
    */
   const handleLogin = async () => {
     setError(null);
     try {
-      await signInWithPopup(auth, githubProvider);
+      // Detect if the user is on a mobile device (simple check)
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      
+      if (isMobile) {
+        // Use Redirect for mobile to avoid popup blockers
+        await signInWithRedirect(auth, githubProvider);
+      } else {
+        // Keep Popup for desktop for better UX
+        await signInWithPopup(auth, githubProvider);
+      }
     } catch (err: any) {
       console.error("Login failed:", err);
-      setError(err.message || "GitHub 登录失败");
+      // Don't set error if the user closed the popup manually
+      if (err.code !== 'auth/popup-closed-by-user') {
+          setError(err.message || "GitHub 登录失败");
+      }
     }
   };
 
