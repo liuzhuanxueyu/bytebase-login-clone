@@ -22,27 +22,42 @@ function App() {
 
   // Listen for authentication state changes and handle redirect result
   useEffect(() => {
+    let isMounted = true;
+
     // 1. Check if we are returning from a redirect login
     getRedirectResult(auth)
       .then((result) => {
-        if (result) {
-          // User is signed in.
-          // No need to do anything here, onAuthStateChanged will trigger.
-          console.log("Redirect login successful");
+        if (isMounted && result && result.user) {
+          // User is signed in via redirect.
+          console.log("Redirect login successful, setting user manually");
+          setUser(result.user);
+          // We can stop loading here as we have a user
+          setLoading(false);
         }
       })
       .catch((err) => {
-        console.error("Redirect login failed:", err);
-        setError(err.message || "GitHub 登录失败 (重定向)");
+        if (isMounted) {
+          console.error("Redirect login failed:", err);
+          setError(err.message || "GitHub 登录失败 (重定向)");
+          setLoading(false);
+        }
       });
 
     // 2. Listen for auth state changes
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      setLoading(false);
+      if (isMounted) {
+        // Only update if we haven't already set the user via redirect result
+        // (though usually they will be the same)
+        setUser(currentUser);
+        setLoading(false);
+      }
     });
+
     // Cleanup subscription on unmount
-    return () => unsubscribe();
+    return () => {
+      isMounted = false;
+      unsubscribe();
+    };
   }, []);
 
   /**
