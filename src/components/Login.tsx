@@ -2,43 +2,48 @@ import React from 'react';
 import { FaGithub } from 'react-icons/fa';
 
 interface LoginProps {
-  /** Callback function to handle login action */
+  // 登录回调
   onLogin: () => void;
 }
 
-/**
- * Login Component
- * 
- * Displays the login UI, including a branded left panel (desktop) and a login form (right).
- * Currently supports GitHub login.
- * 
- * Responsive Design:
- * - Desktop: Split screen with branding on left, form on right.
- * - Mobile: Single column layout with form only.
- */
+// 登录页组件
+// 采用左右分屏布局 (PC) / 单列布局 (Mobile)
 export const Login: React.FC<LoginProps> = ({ onLogin }) => {
   return (
     <div className="flex min-h-screen w-full">
-      {/* Left Side - Branding (Desktop only)
-          Hidden on mobile (md:hidden inverse), visible on medium screens and up (md:flex) */}
-      <div className="hidden md:flex md:w-1/2 bg-gradient-to-br from-indigo-600 to-blue-500 items-center justify-center p-12 relative overflow-hidden">
-        <div className="z-10 text-white text-center">
-          <h1 className="text-4xl font-bold mb-6">Bytebase</h1>
-          <p className="text-lg text-blue-100 max-w-md">
-            面向开发者和 DBA 的数据库 DevSecOps 解决方案。
-          </p>
+      {/* 左侧品牌展示区 (PC端显示) */}
+      <div className="hidden md:flex md:w-1/2 bg-white items-center justify-center p-12 relative overflow-hidden">
+        <div className="w-full h-full flex items-center justify-center">
+            <img 
+              src="https://raw.githubusercontent.com/bytebase/bytebase/main/frontend/src/assets/logo-full.svg" 
+              alt="Bytebase Logo" 
+              className="max-w-[80%] max-h-[80%] object-contain"
+              onError={(e) => {
+                // 如果原图加载失败，回退到原来的渐变色方案 (为了演示健壮性)
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.parentElement!.parentElement!.classList.remove('bg-white');
+                e.currentTarget.parentElement!.parentElement!.classList.add('bg-gradient-to-br', 'from-indigo-600', 'to-blue-500');
+                
+                // 创建临时的文字元素
+                const fallbackDiv = document.createElement('div');
+                fallbackDiv.className = 'z-10 text-white text-center';
+                fallbackDiv.innerHTML = `
+                  <h1 class="text-4xl font-bold mb-6">Bytebase</h1>
+                  <p class="text-lg text-blue-100 max-w-md">
+                    面向开发者和 DBA 的数据库 DevSecOps 解决方案。
+                  </p>
+                `;
+                e.currentTarget.parentElement!.appendChild(fallbackDiv);
+              }}
+            />
         </div>
-        {/* Decorative background elements */}
-        <div className="absolute top-0 left-0 w-64 h-64 bg-white opacity-10 rounded-full -translate-x-1/2 -translate-y-1/2"></div>
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-white opacity-10 rounded-full translate-x-1/3 translate-y-1/3"></div>
       </div>
 
-      {/* Right Side - Login Form 
-          Takes full width on mobile, half width on desktop */}
+      {/* 右侧登录表单 */}
       <div className="w-full md:w-1/2 flex flex-col justify-center items-center p-8 bg-white">
         <div className="w-full max-w-md space-y-8">
           <div className="text-center">
-            {/* Mobile Logo - Only visible on small screens */}
+            {/* 移动端 Logo */}
             <h2 className="md:hidden text-3xl font-bold text-indigo-600 mb-2">Bytebase</h2>
             
             <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
@@ -51,11 +56,10 @@ export const Login: React.FC<LoginProps> = ({ onLogin }) => {
 
           <div className="mt-8 space-y-6">
             <div className="rounded-md shadow-sm -space-y-px">
-              {/* Placeholder for other inputs if needed */}
             </div>
 
             <div>
-              {/* Primary Login Button (GitHub) */}
+              {/* GitHub 登录按钮 */}
               <button
                 onClick={onLogin}
                 className="group relative w-full flex justify-center items-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200"
@@ -67,7 +71,7 @@ export const Login: React.FC<LoginProps> = ({ onLogin }) => {
               </button>
             </div>
             
-            {/* Divider */}
+            {/* 分割线 */}
             <div className="relative">
                 <div className="absolute inset-0 flex items-center">
                     <div className="w-full border-t border-gray-300"></div>
@@ -77,7 +81,7 @@ export const Login: React.FC<LoginProps> = ({ onLogin }) => {
                 </div>
             </div>
 
-            {/* Placeholder Email/Password Form (Disabled for this demo) */}
+            {/* 邮箱/密码表单 (当前仅做 UI 展示) */}
             <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
                 <div>
                     <label htmlFor="email" className="block text-sm font-medium text-gray-700">
@@ -131,4 +135,3 @@ export const Login: React.FC<LoginProps> = ({ onLogin }) => {
     </div>
   );
 };
-
