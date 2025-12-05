@@ -12,136 +12,126 @@ export const Login: React.FC<LoginProps> = ({ onLogin }) => {
   return (
     <div className="flex min-h-screen w-full font-sans">
       {/* 左侧品牌展示区 (PC端显示) */}
-      <div className="hidden md:flex md:w-1/2 bg-[#5F5AF6] items-center justify-center relative overflow-hidden">
-         {/* 使用您提供的截图作为背景图（这里使用 Bytebase 官方类似的插画资源） */}
-         <img 
-            // 这是一个官方类似的插画图床链接，如果显示不出来，建议将您刚才发我的截图保存到项目 public 目录本地引用
-            src="https://raw.githubusercontent.com/bytebase/bytebase/main/frontend/src/assets/illustration/background_login.svg"
-            alt="Bytebase Welcome" 
-            className="object-cover w-full h-full"
-            onError={(e) => {
-                // 如果 SVG 加载失败，尝试加载另一张备用图
-                e.currentTarget.src = "https://bytebase.com/assets/blog/bytebase-2-0/cover.webp";
-            }}
-         />
+      <div className="hidden md:flex md:w-1/2 relative overflow-hidden bg-blue-50">
+        {/* 背景图 - 选用一张明亮的抽象科技风格图片 */}
+        <img 
+            src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1964&auto=format&fit=crop" 
+            alt="Abstract Background" 
+            className="absolute inset-0 w-full h-full object-cover"
+        />
+        
+        {/* 浅色遮罩，确保图片不干扰文字 */}
+        <div className="absolute inset-0 bg-indigo-600/80 mix-blend-multiply"></div>
+        
+        {/* 内容 */}
+        <div className="z-10 relative w-full h-full flex flex-col items-center justify-center p-12 text-white text-center">
+          {/* 装饰性 Logo 框 */}
+          <div className="mb-8 p-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 shadow-xl flex items-center justify-center">
+             {/* 简单的几何图形代替 Emoji，显得更专业 */}
+             <div className="relative w-12 h-12">
+                <div className="absolute inset-0 bg-blue-400 rounded-full opacity-50 animate-pulse"></div>
+                <div className="absolute inset-2 bg-white rounded-tr-xl rounded-bl-xl shadow-inner"></div>
+             </div>
+          </div>
+          
+          <h1 className="text-4xl font-bold mb-6 drop-shadow-md tracking-wider">Bytebase</h1>
+          <p className="text-lg text-blue-50 max-w-md font-medium leading-relaxed drop-shadow-sm">
+            面向开发者和 DBA 的数据库 DevSecOps 解决方案
+          </p>
+        </div>
       </div>
 
       {/* 右侧登录表单 */}
       <div className="w-full md:w-1/2 flex flex-col justify-center items-center p-8 bg-white">
-        <div className="w-full max-w-[400px]"> {/* 调整最大宽度匹配原图 */}
-          <div className="text-left mb-8"> {/* 改为左对齐 */}
-            <div className="flex items-center gap-2 mb-6 justify-center"> {/* Logo 居中 */}
-                {/* Bytebase Logo 图标 */}
-                <img src="https://bytebase.com/logo-icon.svg" alt="Bytebase" className="w-8 h-8" />
-                <span className="text-2xl font-bold text-gray-900">Bytebase</span>
-            </div>
+        <div className="w-full max-w-md space-y-8">
+          <div className="text-center">
+            {/* 移动端 Logo */}
+            <h2 className="md:hidden text-3xl font-bold text-indigo-600 mb-2">Bytebase</h2>
             
-            <h2 className="text-[#5F5AF6] text-xl font-medium mb-1">
-              Setup admin account
+            <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
+              登录您的账号
             </h2>
-            {/* 原图没有副标题，这里留空或根据需要添加 */}
+            <p className="mt-2 text-sm text-gray-600">
+              欢迎回来！请输入您的详细信息。
+            </p>
           </div>
 
-          <div className="space-y-5"> {/* 调整间距 */}
-            
-            {/* 模拟原图的表单样式 */}
-            <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">
-                    Email <span className="text-red-500">*</span>
-                </label>
-                <input
-                    type="email"
-                    className="w-full px-3 py-2 bg-[#F3F4F6] border border-transparent rounded text-sm focus:outline-none focus:bg-white focus:border-[#5F5AF6] transition-colors"
-                    value="chengzw258@163.com" // 模拟原图填入值
-                    readOnly
-                />
+          <div className="mt-8 space-y-6">
+            <div className="rounded-md shadow-sm -space-y-px">
             </div>
 
             <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">
-                    Password <span className="text-red-500">*</span>
-                </label>
-                <div className="relative">
-                    <input
-                        type="password"
-                        className="w-full px-3 py-2 bg-[#F3F4F6] border border-transparent rounded text-sm focus:outline-none focus:bg-white focus:border-[#5F5AF6] transition-colors"
-                        value="......"
-                        readOnly
-                    />
-                     <span className="absolute right-3 top-2.5 text-gray-400 text-xs cursor-pointer">
-                        🚫
-                     </span>
-                </div>
-            </div>
-
-             <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">
-                    Confirm Password <span className="text-red-500">*</span>
-                </label>
-                <div className="relative">
-                     <input
-                        type="password"
-                        className="w-full px-3 py-2 bg-[#F3F4F6] border border-transparent rounded text-sm focus:outline-none focus:bg-white focus:border-[#5F5AF6] transition-colors"
-                        value="......"
-                        readOnly
-                    />
-                    <span className="absolute right-3 top-2.5 text-gray-400 text-xs cursor-pointer">
-                        🚫
-                     </span>
-                </div>
-            </div>
-
-             <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">
-                    Username
-                </label>
-                <input
-                    type="text"
-                    className="w-full px-3 py-2 border border-gray-200 rounded text-sm focus:outline-none focus:border-[#5F5AF6]"
-                    value="seven"
-                    readOnly
-                />
-            </div>
-
-            <div className="flex items-start gap-2 my-4">
-                <input type="checkbox" className="mt-1 w-4 h-4 text-[#5F5AF6] rounded border-gray-300 focus:ring-[#5F5AF6]" defaultChecked />
-                <span className="text-xs text-gray-600">
-                    I accept Bytebase's <a href="#" className="text-[#5F5AF6] hover:underline">Terms of Service</a> and <a href="#" className="text-[#5F5AF6] hover:underline">Privacy Policy</a>
+              {/* GitHub 登录按钮 */}
+              <button
+                onClick={onLogin}
+                className="group relative w-full flex justify-center items-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200"
+              >
+                <span className="absolute left-0 inset-y-0 flex items-center pl-3">
+                  <FaGithub className="h-5 w-5 text-white group-hover:text-gray-300 transition-colors" />
                 </span>
+                使用 GitHub 登录
+              </button>
             </div>
-
-            {/* Create Account Button (模拟原图的主按钮) */}
-            <button
-                className="w-full py-2.5 px-4 border border-transparent rounded bg-[#5F5AF6] text-white text-sm font-medium hover:bg-[#4f4acc] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#5F5AF6] shadow-sm mb-4"
-            >
-                Create admin account
-            </button>
-
-             {/* 分割线 - 提示可以使用 GitHub 登录 */}
-             <div className="relative my-6">
+            
+            {/* 分割线 */}
+            <div className="relative">
                 <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-gray-200"></div>
+                    <div className="w-full border-t border-gray-300"></div>
                 </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                    <span className="px-2 bg-white text-gray-400">Or sign in with</span>
+                <div className="relative flex justify-center text-sm">
+                    <span className="px-2 bg-white text-gray-500">或使用邮箱登录</span>
                 </div>
             </div>
 
-            {/* GitHub 登录按钮 (实际功能按钮) */}
-            <button
-              onClick={onLogin}
-              className="w-full flex justify-center items-center py-2.5 px-4 border border-gray-300 rounded bg-white text-gray-700 text-sm font-medium hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors"
-            >
-              <FaGithub className="h-5 w-5 mr-2" />
-              Sign in with GitHub
-            </button>
+            {/* 邮箱/密码表单 (当前仅做 UI 展示) */}
+            <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+                <div>
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                        电子邮箱
+                    </label>
+                    <div className="mt-1">
+                        <input
+                            id="email"
+                            name="email"
+                            type="email"
+                            autoComplete="email"
+                            className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-white"
+                            placeholder="请输入您的邮箱"
+                        />
+                    </div>
+                </div>
+
+                <div>
+                    <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                        密码
+                    </label>
+                    <div className="mt-1">
+                        <input
+                            id="password"
+                            name="password"
+                            type="password"
+                            autoComplete="current-password"
+                            className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-white"
+                            placeholder="请输入您的密码"
+                        />
+                    </div>
+                </div>
+
+                <div>
+                    <button
+                        type="button"
+                        className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    >
+                        登录
+                    </button>
+                </div>
+            </form>
 
           </div>
           
-          <div className="mt-12 flex justify-between items-center text-xs text-gray-400">
-             <span>English 简体中文</span>
-             <span>&copy; 2025 Bytebase. All rights reserved.</span>
-          </div>
+          <p className="text-center text-xs text-gray-500">
+            &copy; {new Date().getFullYear()} Bytebase 登录系统演示.
+          </p>
         </div>
       </div>
     </div>
