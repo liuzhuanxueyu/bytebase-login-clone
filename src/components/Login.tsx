@@ -12,31 +12,23 @@ export const Login: React.FC<LoginProps> = ({ onLogin }) => {
   return (
     <div className="flex min-h-screen w-full">
       {/* 左侧品牌展示区 (PC端显示) */}
-      <div className="hidden md:flex md:w-1/2 bg-white items-center justify-center p-12 relative overflow-hidden">
-        <div className="w-full h-full flex items-center justify-center">
-            <img 
-              src="https://raw.githubusercontent.com/bytebase/bytebase/main/frontend/src/assets/logo-full.svg" 
-              alt="Bytebase Logo" 
-              className="max-w-[80%] max-h-[80%] object-contain"
-              onError={(e) => {
-                // 如果原图加载失败，回退到原来的渐变色方案 (为了演示健壮性)
-                e.currentTarget.style.display = 'none';
-                e.currentTarget.parentElement!.parentElement!.classList.remove('bg-white');
-                e.currentTarget.parentElement!.parentElement!.classList.add('bg-gradient-to-br', 'from-indigo-600', 'to-blue-500');
-                
-                // 创建临时的文字元素
-                const fallbackDiv = document.createElement('div');
-                fallbackDiv.className = 'z-10 text-white text-center';
-                fallbackDiv.innerHTML = `
-                  <h1 class="text-4xl font-bold mb-6">Bytebase</h1>
-                  <p class="text-lg text-blue-100 max-w-md">
-                    面向开发者和 DBA 的数据库 DevSecOps 解决方案。
-                  </p>
-                `;
-                e.currentTarget.parentElement!.appendChild(fallbackDiv);
-              }}
-            />
-        </div>
+      <div className="hidden md:flex md:w-1/2 bg-[#5F5AF6] items-center justify-center relative overflow-hidden">
+         {/* 尝试加载您提供的官方插画风格图片 */}
+         <img 
+            src="https://raw.githubusercontent.com/bytebase/bytebase/main/frontend/src/assets/illustration/welcome.webp"
+            alt="Bytebase Welcome" 
+            className="object-cover w-full h-full"
+            onError={(e) => {
+              // 备用图片：如果上面的 webp 加载失败，尝试加载另一张常用的宣传图
+              const target = e.currentTarget;
+              if (target.src.includes('welcome.webp')) {
+                  target.src = "https://bytebase.com/assets/blog/bytebase-2-0/cover.webp";
+              } else {
+                  // 如果都失败了，回退到纯色背景
+                  target.style.display = 'none';
+              }
+            }}
+         />
       </div>
 
       {/* 右侧登录表单 */}
